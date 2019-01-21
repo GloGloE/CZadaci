@@ -241,7 +241,28 @@ void main()
 
 	int newSize = N + 10;
 
-	realloc(arr, newSize);
+	//----
+	//Prvi nacin - realociramo memoriju iz starog arraya u novi
+	int *tmpPointer;
+
+	tmpPointer = realloc(arr, newSize * sizeof(int));
+
+	if (tmpPointer == NULL)
+	{
+		printf("\nError with reallocation\n");
+		free(arr);
+		exit(1);
+	}
+	else
+	{
+		arr = tmpPointer; //ako je sve ok, stari array koji smo imali sada pokazuje na novi array koji je zadrzao stare vrijednosti
+	}
+	//----
+
+	//----
+	//Drugi nacin - prosirujemo originalni array na novu velicinu
+	//arr = realloc(arr, newSize * sizeof(int));
+	//----
 
 	for (int i = N; i < newSize; ++i)
 	{
@@ -253,12 +274,9 @@ void main()
 		printf("%d ", *(arr + i));
 	}
 
-	if (arr)
-	{
-		printf("\nCleaning up...\n");
-		free(&arr); // Oslobadja memoriju ( tzv. memory leak-ovi nastaju kada se ne oslobodi memorija i to nije ok )
-		arr = NULL;
-	}
+	printf("\nCleaning up...\n");
+	free(arr); // Oslobadja memoriju ( tzv. memory leak-ovi nastaju kada se ne oslobodi memorija i to nije ok )
+	arr = NULL;
 
 	system("PAUSE");
 }
