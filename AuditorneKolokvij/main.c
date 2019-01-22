@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #define ZADATAK 0
-#define KOLOKVIJ 1
+#define KOLOKVIJ 2
 
 #if ZADATAK == 1
 //Definirati funkciju koja prima kao parametar broj N, a vraca kao rezultat sumu od 1 do N.
@@ -296,9 +296,9 @@ void main()
 	char stringBuffer[100 + 1] = { 0 };
 
 	printf("Unesi poruku: ");
-	fgets(stringBuffer, sizeof(stringBuffer), stdin); // Ucitava cijelu liniju, takodjer i space-ove, stavlja \0 znak na kraj
+	fgets(stringBuffer, sizeof(stringBuffer), stdin); // Ucitava cijelu liniju, takodjer i space-ove i \n
 
-	str = calloc(strlen(stringBuffer) + 1, sizeof(char)); // Alociramo duljinu linije +1 jer strlen zanemari \0 znak
+	str = calloc(strlen(stringBuffer) + 1, sizeof(char)); // Alociramo duljinu linije +1 jer je upisan i \n znak
 	strncat(str, stringBuffer, strlen(stringBuffer)); // kopiramo sadrzaj stringBuffera u str
 
 	ispisStringa(str);
@@ -363,6 +363,74 @@ void main()
 	printf("Prvi broj: %d\nDrugi broj: %d\nRazlika zbroja prvih i zadnjih znamenki: %d\n", prvi, drugi, rezultat);
 
 	system("PAUSE");
+}
+
+#elif ZADATAK == 0 && KOLOKVIJ == 2
+
+#include <string.h>
+#include <stdlib.h>
+
+void izracunajBrojZnakovaDinamickogArraya(char *, int *);
+
+void izracunajBrojZnakovaStatickogArraya(char *, int *);
+
+void main()
+{
+	int arr[3] = { 0 };
+	char stringBuffer[1000 + 1] = { 0 };
+	char *str;
+
+	printf("Unesi poruku:\n");
+	fgets(stringBuffer, sizeof(stringBuffer), stdin); // Ucitava cijelu liniju, takodjer i space-ove i \n
+	
+	str = calloc(strlen(stringBuffer) + 1, sizeof(char)); // Alociramo duljinu linije +1 jer upisan i \n znak
+	strncat(str, stringBuffer, strlen(stringBuffer)); // kopiramo sadrzaj stringBuffera u str
+
+	izracunajBrojZnakovaDinamickogArraya(str, arr);
+	printf("Broj svih znakova: %d\nBroj znakova bez razmaka i novog reda: %d\nBroj slova a: %d\n", *(arr), *(arr + 1), *(arr + 2) );
+	
+	arr[0] = 0; arr[1] = 0; arr[2] = 0;
+
+	izracunajBrojZnakovaStatickogArraya(stringBuffer, arr);
+	printf("\nBroj svih znakova: %d\nBroj znakova bez razmaka i novog reda: %d\nBroj slova a: %d\n", *(arr), *(arr + 1), *(arr + 2));
+
+
+	free(str);
+	str = NULL;
+
+	system("PAUSE");
+}
+
+void izracunajBrojZnakovaDinamickogArraya(char *str, int *arr)
+{
+	*(arr) = strlen(str); //Broj svih znakova ukljucujuci razmake i \n
+	for (int i = 0; i < strlen(str); ++i)
+	{
+		if (*(str + i) != ' ' && *(str + i) != '\n') //Broj svih znakova iskljucujuci razmake i novi red (\n)
+		{
+			(*(arr + 1))++;
+		}
+		if (*(str + i) == 'a') //Broj svih znakova 'a'
+		{
+			(*(arr + 2))++;
+		}
+	}
+}
+
+void izracunajBrojZnakovaStatickogArraya(char *str, int *arr)
+{
+	*(arr) = strlen(str); //Broj svih znakova ukljucujuci razmake i \n
+	for (int i = 0; i < strlen(str); ++i)
+	{
+		if (*(str + i) != ' ' && *(str + i) != '\n') //Broj svih znakova iskljucujuci razmake i novi red (\n)
+		{
+			(*(arr + 1))++;
+		}
+		if (*(str + i) == 'a') //Broj svih znakova 'a'
+		{
+			(*(arr + 2))++;
+		}
+	}
 }
 
 #endif
