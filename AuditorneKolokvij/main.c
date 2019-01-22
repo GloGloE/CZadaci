@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 
-#define ZADATAK 7
+#define ZADATAK 0
+#define KOLOKVIJ 1
 
 #if ZADATAK == 1
 //Definirati funkciju koja prima kao parametar broj N, a vraca kao rezultat sumu od 1 do N.
@@ -249,13 +250,13 @@ void main()
 
 	if (tmpPointer == NULL)
 	{
-		printf("\nError with reallocation\n");
-		free(arr);
-		exit(1);
+	printf("\nError with reallocation\n");
+	free(arr);
+	exit(1);
 	}
 	else
 	{
-		arr = tmpPointer; //ako je sve ok, stari array koji smo imali sada pokazuje na novi array koji je zadrzao stare vrijednosti
+	arr = tmpPointer; //ako je sve ok, stari array koji smo imali sada pokazuje na novi array koji je zadrzao stare vrijednosti
 	}
 	//----
 
@@ -277,6 +278,89 @@ void main()
 	printf("\nCleaning up...\n");
 	free(arr); // Oslobadja memoriju ( tzv. memory leak-ovi nastaju kada se ne oslobodi memorija i to nije ok )
 	arr = NULL;
+
+	system("PAUSE");
+}
+
+#elif ZADATAK == 8
+//Napraviti funkciju za ispis stringa.
+
+#include <string.h>
+#include <stdlib.h>
+
+void ispisStringa(char *);
+
+void main()
+{
+	char *str;
+	char stringBuffer[100 + 1] = { 0 };
+
+	printf("Unesi poruku: ");
+	fgets(stringBuffer, sizeof(stringBuffer), stdin); // Ucitava cijelu liniju, takodjer i space-ove, stavlja \0 znak na kraj
+
+	str = calloc(strlen(stringBuffer) + 1, sizeof(char)); // Alociramo duljinu linije +1 jer strlen zanemari \0 znak
+	strncat(str, stringBuffer, strlen(stringBuffer)); // kopiramo sadrzaj stringBuffera u str
+
+	ispisStringa(str);
+	printf("Ispis iz printfa: %s\n", str);
+
+	free(str); // oslobodi memoriju
+	str = NULL; // preusmjeri pokazivac na NULL jer je to good practice
+
+	system("PAUSE");
+}
+
+void ispisStringa(char *string)
+{
+	printf("Ispis iz funkcije preko petlje: ");
+	for (int i = 0; i < strlen(string); ++i)
+	{
+		printf("%c", *(string + i));
+	}
+	printf("\n");
+}
+
+#elif ZADATAK == 0 && KOLOKVIJ == 1
+
+#include <math.h>
+
+int zbrojiZnamenke(int prviBroj, int drugiBroj)
+{
+	int prvaZnamenka1 = prviBroj, prvaZnamenka2 = drugiBroj, zadnjaZnamenka1, zadnjaZnamenka2, zbrojPrvih, zbrojZadnjih, razlikaZnamenki = 0;
+
+	while (prvaZnamenka1 > 10)
+	{
+		prvaZnamenka1 = prvaZnamenka1 / 10;
+	}
+	while (prvaZnamenka2 > 10)
+	{
+		prvaZnamenka2 = prvaZnamenka2 / 10;
+	}
+
+	zadnjaZnamenka1 = prviBroj % 10;
+	zadnjaZnamenka2 = drugiBroj % 10;
+
+	zbrojPrvih = prvaZnamenka1 + prvaZnamenka2;
+	zbrojZadnjih = zadnjaZnamenka1 + zadnjaZnamenka2;
+
+	razlikaZnamenki = zbrojPrvih - zbrojZadnjih;
+
+	return razlikaZnamenki;
+}
+
+void main()
+{
+	int prvi, drugi, rezultat = 0;
+
+	printf("Unesi prvi: ");
+	scanf("%d", &prvi);
+
+	printf("Unesi drugi: ");
+	scanf("%d", &drugi);
+
+	rezultat = zbrojiZnamenke(prvi, drugi);
+
+	printf("Prvi broj: %d\nDrugi broj: %d\nRazlika zbroja prvih i zadnjih znamenki: %d\n", prvi, drugi, rezultat);
 
 	system("PAUSE");
 }
