@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #define ZADATAK 0
-#define KOLOKVIJ 2
+#define KOLOKVIJ 4
 
 #if ZADATAK == 1
 //Definirati funkciju koja prima kao parametar broj N, a vraca kao rezultat sumu od 1 do N.
@@ -431,6 +431,102 @@ void izracunajBrojZnakovaStatickogArraya(char *str, int *arr)
 			(*(arr + 2))++;
 		}
 	}
+}
+
+#elif ZADATAK == 0 && KOLOKVIJ == 4
+
+#include <stdlib.h>
+
+struct Student
+{
+	char ime[20];
+	char prezime[20];
+	int ocjene[4];
+	int brojpetardi;
+};
+
+void main()
+{
+	FILE *file = fopen("ocjene.txt", "r");
+
+	char buffer[100];
+	int numberOfStudents = 0;
+
+	if (file)
+	{
+		while (fgets(buffer, 100, file))
+		{
+			numberOfStudents++;
+		}
+	}
+	else
+	{
+		printf("Error!");
+		exit(1);
+	}
+
+	struct Student *studenti = calloc(numberOfStudents, sizeof(struct Student));
+
+	//printf("Number of students: %d\nSize of memory allocated students: %d\n", numberOfStudents);
+
+	rewind(file);
+
+	int counter = 0;
+		
+	while (fscanf(file, "%s %s %d%*c%d%*c%d%*c%d",
+		studenti[counter].ime, studenti[counter].prezime,
+		&studenti[counter].ocjene[0],
+		&studenti[counter].ocjene[1],
+		&studenti[counter].ocjene[2],
+		&studenti[counter].ocjene[3]
+		) != EOF)
+	{
+		studenti[counter].brojpetardi = 0;
+		++counter;
+	}
+
+	for (int i = 0; i < numberOfStudents; ++i)
+	{
+		printf("%s %s Ocjene: %d %d %d %d\n", (studenti+i)->ime, (studenti + i)->prezime, 
+			(studenti + i)->ocjene[0], 
+			(studenti + i)->ocjene[1], 
+			(studenti + i)->ocjene[2], 
+			(studenti + i)->ocjene[3]
+		);
+		for (int j = 0; j < 4; ++j)
+		{
+			if (studenti[i].ocjene[j] == 5)
+			{
+				studenti[i].brojpetardi++;
+			}
+		}
+	}
+
+	int najboljiStudent = 0;
+	for (int i = 1; i < numberOfStudents; ++i)
+	{
+		if (studenti[i].brojpetardi > studenti[najboljiStudent].brojpetardi)
+		{
+			najboljiStudent = i;
+		}
+	}
+
+	char suff = 'a';
+	if (studenti[najboljiStudent].brojpetardi > 1 && studenti[najboljiStudent].brojpetardi < 5)
+	{
+		suff = 'e';
+	}
+	else
+	{
+		suff = 'i';
+	}
+
+	printf("\nNajbolji student je: %s sa %d petard%c\n", studenti[najboljiStudent].prezime, studenti[najboljiStudent].brojpetardi, suff);
+
+	
+	fclose(file);
+	free(studenti);
+	system("PAUSE");
 }
 
 #endif
