@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#define ZADATAK 0
+#define ZADATAK 13
 #define KOLOKVIJ 4
 
 #if ZADATAK == 1
@@ -527,6 +527,46 @@ void main()
 	fclose(file);
 	free(studenti);
 	system("PAUSE");
+}
+
+#elif ZADATAK == 13
+//Napraviti funkciju koja zamjenjuje svaki znak u stringu sa njegovom hexadekadskom vrijednošću i kao rezultat vraća novonastali string.Zadan je prototip funkcije :
+//char* zamijeniHex(char* str)
+
+//Ana voli...
+//0x41 0x6e 0x61 0x20 0x76 0x6f 0x6c 0x69 0x2e 0x2e 0x2e
+
+#include <stdlib.h>
+#include <string.h>
+
+char* zamijeniHex(char* str);
+
+void main()
+{
+	char s[256];
+	scanf("%[^\n]", s); // Ucitaj liniju ali zanemari \n znak
+
+	printf("%s\n", zamijeniHex(s)); // direkt ispis u printf() funkciji, jer nasa zamijeniHex() funkcija vraca string (pointer na char array)
+
+	system("PAUSE");
+}
+
+char* zamijeniHex(char* str)
+{
+	char *rezultat = calloc(strlen(str) + 1, sizeof(char) * 5); // sizeof(char) == 1, znaci da jedan char zauzima jedno mjesto, mi prosirujemo to puta 5 jer hex vrijednost ima 4 chara i razmak
+	char *tmp = rezultat; // koristimo tmp pokazivac jer ce u while() funkciji pokazivac biti na zadnjoj memorijskoj adresi sto je u teoriji prazno, te bi u tom slucaju return njega bio prazan string
+
+	char hex[6] = { 0 };
+
+	while (*str) // vrti petlju dok god vrijednost str nije NULL ili smece
+	{
+		sprintf(hex, "0x%2x ", *str); // 4 znaka i razmak
+		strcpy(tmp, hex);
+		tmp += 5; // pomakni pokazivac za 5 mjesta (jer ima 4 znaka i razmak:)
+		str++; // pomakni pokazivac za 1 mjesto (1 znak)
+	}
+
+	return rezultat; // pokazivac rezultat i dalje pokazuje na prvu memorijsku lokaciju (index == 0)
 }
 
 #endif
